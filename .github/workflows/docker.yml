@@ -27,4 +27,4 @@ jobs:
       - name: Docker buildx image and push on master branch
         if: github.ref == 'refs/heads/master'
         run: |
-          docker buildx build --output "type=image,push=true" --platform=linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8 --tag xjasonlyu/caddy:latest .
+          docker buildx build --output "type=image,push=true" --platform=linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64 --tag xjasonlyu/caddy:latest .
