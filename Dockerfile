@@ -1,11 +1,14 @@
-FROM caddy:builder AS builder
+FROM golang:alpine AS builder
 
-# Specify caddy version
-ENV CADDY_SOURCE_VERSION=master
+# v2.2.0-rc.1
+ENV CADDY_VERSION=master
 
-RUN caddy-builder \
-    github.com/mholt/caddy-webdav \
-    github.com/caddy-dns/cloudflare
+RUN apk add --no-cache git \
+    && go get -u github.com/caddyserver/xcaddy/cmd/xcaddy \
+    && xcaddy build \
+    --output /usr/bin/caddy \
+    --with github.com/mholt/caddy-webdav \
+    --with github.com/caddy-dns/cloudflare
 
 FROM caddy:latest
 
