@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+      - name: Check out
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - name: Set up docker buildx
         id: buildx
         uses: crazy-max/ghaction-docker-buildx@v3
