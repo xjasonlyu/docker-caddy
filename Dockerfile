@@ -1,5 +1,7 @@
 FROM caddy:builder AS builder
 
+ENV CADDY_SOURCE_VERSION=master
+
 RUN caddy-builder \
     github.com/mholt/caddy-webdav \
     github.com/caddy-dns/cloudflare
