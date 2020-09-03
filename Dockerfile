@@ -1,5 +1,6 @@
 FROM caddy:builder AS builder
 
+# Specify caddy version
 ENV CADDY_SOURCE_VERSION=master
 
 RUN caddy-builder \
