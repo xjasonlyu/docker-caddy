@@ -1,7 +1,7 @@
 FROM golang:alpine AS builder
 
 # v2.2.0-rc.1
-ENV CADDY_VERSION=master
+ARG CADDY_VERSION=master
 
 RUN apk add --no-cache git \
     && go get -u github.com/caddyserver/xcaddy/cmd/xcaddy \
