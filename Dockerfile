@@ -1,7 +1,8 @@
 FROM golang:alpine AS builder
 
-# v2.2.0-rc.2
 ARG CADDY_VERSION=master
+# Configures xcaddy to not clean up post-build (unnecessary in a container)
+ENV XCADDY_SKIP_CLEANUP=1
 
 RUN apk add --no-cache git \
     && go get -u github.com/caddyserver/xcaddy/cmd/xcaddy \
