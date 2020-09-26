@@ -1,6 +1,6 @@
 FROM golang:alpine AS builder
 
-ARG CADDY_VERSION=master
+ARG CADDY_VERSION
 # Configures xcaddy to not clean up post-build (unnecessary in a container)
 ENV XCADDY_SKIP_CLEANUP=1
 
