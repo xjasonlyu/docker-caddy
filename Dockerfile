@@ -5,7 +5,7 @@ ARG CADDY_VERSION
 ENV XCADDY_SKIP_CLEANUP=1
 
 RUN apk add --no-cache git \
-    && go get -u github.com/caddyserver/xcaddy/cmd/xcaddy \
+    && go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest \
     && xcaddy build \
     --output /usr/bin/caddy \
     --with github.com/mholt/caddy-webdav \
