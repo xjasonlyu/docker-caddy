@@ -12,5 +12,6 @@ RUN apk add --no-cache git \
     --with github.com/caddy-dns/cloudflare
 
 FROM caddy:latest
+LABEL org.opencontainers.image.source="https://github.com/xjasonlyu/docker-caddy"
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
