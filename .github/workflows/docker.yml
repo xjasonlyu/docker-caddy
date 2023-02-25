@@ -57,9 +57,9 @@ jobs:
           [ "$?" -ne 0 ] && exit 1
 
           if [ "${VERSION_UP}" == "${VERSION_DOWN}" ]; then
-              echo ::set-output name=version::"pass:${VERSION_UP}"
+              echo "version=pass:${VERSION_UP}" >> $GITHUB_OUTPUT
           else
-              echo ::set-output name=version::"${VERSION_UP}"
+              echo "version=${VERSION_UP}" >> $GITHUB_OUTPUT
           fi
 
       - name: Build and Push
