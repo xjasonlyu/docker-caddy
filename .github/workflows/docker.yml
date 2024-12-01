@@ -3,14 +3,13 @@ name: Publish Docker Image
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: "0 0 * * 0"
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-
       - name: Check out
         uses: actions/checkout@v4
 
@@ -39,22 +38,17 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          DOCKER_HUB_UP="library/caddy"
-          DOCKER_HUB_DOWN="xjasonlyu/caddy"
+          IMAGE_UP="caddy:latest"
+          IMAGE_DOWN="xjasonlyu/caddy:latest"
 
-          AUTH_DOMAIN="auth.docker.io"
-          AUTH_SERVICE="registry.docker.io"
-          AUTH_OFFLINE_TOKEN="1"
-          AUTH_CLIENT_ID="shell"
-          API_DOMAIN="registry-1.docker.io"
-
-          TOKEN=$(curl -s -f -X GET -u ${DOCKER_USERNAME}:${DOCKER_PASSWORD} "https://${AUTH_DOMAIN}/token?service=${AUTH_SERVICE}&scope=repository:${DOCKER_HUB_UP}:pull&offline_token=${AUTH_OFFLINE_TOKEN}&client_id=${AUTH_CLIENT_ID}" | jq -r '.token')
-          VERSION_UP=$(curl -s -f -H "Authorization: Bearer ${TOKEN}" https://${API_DOMAIN}/v2/${DOCKER_HUB_UP}/tags/list | jq -r '.tags[]' | grep -E '^[0-9.]+$' | sort --version-sort | tail -n 1)
+          VERSION_UP=$(docker run --rm ${IMAGE_UP} caddy --version | cut -d ' ' -f 1 | cut -c2-)
           [ "$?" -ne 0 ] && exit 1
 
-          TOKEN=$(curl -s -f -X GET -u ${DOCKER_USERNAME}:${DOCKER_PASSWORD} "https://${AUTH_DOMAIN}/token?service=${AUTH_SERVICE}&scope=repository:${DOCKER_HUB_DOWN}:pull&offline_token=${AUTH_OFFLINE_TOKEN}&client_id=${AUTH_CLIENT_ID}" | jq -r '.token')
-          VERSION_DOWN=$(curl -s -f -H "Authorization: Bearer ${TOKEN}" https://${API_DOMAIN}/v2/${DOCKER_HUB_DOWN}/tags/list | jq -r '.tags[]' | grep -E '^[0-9.]+' | sort --version-sort | tail -n 1)
+          VERSION_DOWN=$(docker run --rm ${IMAGE_DOWN} caddy --version | cut -d ' ' -f 1 | cut -c2-)
           [ "$?" -ne 0 ] && exit 1
+
+          echo "Official Caddy version: ${VERSION_UP}"
+          echo "Customized Caddy version: ${VERSION_DOWN}"
 
           if [ "${VERSION_UP}" == "${VERSION_DOWN}" ]; then
               echo "version=pass:${VERSION_UP}" >> $GITHUB_OUTPUT
